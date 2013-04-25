@@ -24,22 +24,26 @@ Here is the list of all the Edify commands this parser can currently process and
 *By no means am I a bash expert, so if you have suggestions for better bash equivalents of any edify commands please post them*
 
     package_extract_file("path/to/source/file.txt", "/path/to/destination/file.txt");
+    
     busybox cp -fp /path/to/source/file.txt /path/to/destination/file.txt
 
 -
 
     package_extract_dir("/source/folder", "/destination/folder");
+    
     busybox cp -rfp /source/folder/* /destination/folder
     
 -
 
     set_perm(0, 2000, 0755, "/file/or/folder");
+    
     chown 0:2000 /file/or/folder
     chmod 0755 /file/or/folder
 
 -
 
     set_perm_recursive(0, 2000, 0644, 0755, "/path/to/set/permissions/recursively);
+    
     chown 0:2000 /path/to/set/permissions/recursively
     chown 0:2000 /path/to/set/permissions
     chown 0:2000 /path/to/set
@@ -54,21 +58,25 @@ Here is the list of all the Edify commands this parser can currently process and
 -
 
     delete("file/to/delete");
+    
     busybox rm -f /file/to/delete
 
 -
 
     run_program("/script/to/run.sh");
+    
     sh /script/to/run.sh
 
 -
 
     mount("ext4", "EMMC", "/dev/block/mmcblk0p9", "/system");
+    
     busybox mount -o rw,remount -t auto /system (will soon change to -t mmcblk0p9 or whichever mount point is in the updater-script)
 
 -
 
     unmount("/system");
+    
     busybox mount -o remount,ro /system
 
 -
@@ -84,8 +92,6 @@ Here is the list of all the Edify commands this parser can currently process and
         "/system/xbin/clear", "/system/xbin/cmp", "/system/xbin/comm",
         "/as/many/lines/as/you/want");
         
--
-
     ln -s busybox  /system/xbin/[ /system/xbin/[[
         /system/xbin/adjtimex /system/xbin/arp /system/xbin/ash
         /system/xbin/awk /system/xbin/base64 /system/xbin/basename
