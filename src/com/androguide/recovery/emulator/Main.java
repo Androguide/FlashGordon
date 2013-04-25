@@ -130,6 +130,7 @@ public class Main extends Activity implements OnCheckedChangeListener,
 		case R.id.flashNow:
 			flashNow();
 			isWhichWipe();
+
 			break;
 
 		default:
@@ -151,7 +152,11 @@ public class Main extends Activity implements OnCheckedChangeListener,
 				EdifyParser.readUpdaterScript(temp + "/" + updaterScript);
 				CMDProcessor cmd = new CMDProcessor();
 				cmd.su.runWaitFor("busybox mount -o remount,rw /system");
+				cmd.su.runWaitFor("busybox mount -o remount,rw /");
+				cmd.su.runWaitFor("mkdir /tmp");
 				cmd.su.runWaitFor("sh " + temp + "/" + "flash_gordon.sh");
+				cmd.su.runWaitFor("busybox rm -f /tmp/*");
+				cmd.su.runWaitFor("busybox mount -o remount,ro /");
 				cmd.su.runWaitFor("busybox mount -o remount,ro /system");
 				handler.sendEmptyMessage(0);
 			}
@@ -163,6 +168,8 @@ public class Main extends Activity implements OnCheckedChangeListener,
 			public void handleMessage(Message msg) {
 				flashDialog.dismiss();
 				createNotification(1234);
+				CMDProcessor cmd = new CMDProcessor();
+				cmd.su.runWaitFor("busybox sed -i \'/^$/d\' " + temp + "/flash_gordon.sh");
 				super.handleMessage(msg);
 			}
 		};

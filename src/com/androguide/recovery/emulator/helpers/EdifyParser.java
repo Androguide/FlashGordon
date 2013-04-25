@@ -25,7 +25,7 @@ public class EdifyParser {
 
 		// delete all ");"
 		curr = curr.replaceAll("\\s+", " ");
-		curr = curr.replaceAll("\"/tmp/", "\"" + temp + "/");
+		curr = curr.replaceAll("assert\\(", "");
 
 		// symlink() parsing & translation
 		if (curr.contains("symlink(")) {
@@ -40,7 +40,7 @@ public class EdifyParser {
 					+ "/flash_gordon.sh");
 
 			// avoiding assert() lines
-		} else if (curr.contains("assert(")) {
+		} else if (curr.contains("getprop")) {
 			// TODO: translate assert() with the getBuildPropValueOf("") method
 			// from CMDProcessor
 
@@ -163,14 +163,31 @@ public class EdifyParser {
 
 			// run_program() parsing & translation
 		} else if (curr.contains("run_program(\"")) {
-			curr = curr.replaceAll(",", "");
-			curr = curr.replaceAll("\"", "");
-			curr = curr.replaceAll("\\)", "");
-			curr = curr.replaceAll(";", "");
-			curr = curr.replaceAll("run_program\\(", "sh ");
-			Log.v("Recovery Emulator", curr);
-			cmd.su.runWaitFor("echo \"" + curr + "\" >> " + temp
-					+ "/flash_gordon.sh");
+
+			if (curr.contains("/sbin/busybox")) {
+				curr = curr.replaceAll("\\)", "");
+				curr = curr.replaceAll(";", "");
+				curr = curr.replaceAll("\"", "");
+				curr = curr.replaceAll("run_program\\(/sbin/busybox",
+						"busybox ");
+				String arr[] = curr.split(",");
+				int i = 0;
+				String chain = "";
+				while (i < arr.length) {
+					chain = chain + arr[i];
+					i++;
+				}
+				Log.v("Recovery Emulator", chain);
+			} else {
+				curr = curr.replaceAll(",", "");
+				curr = curr.replaceAll("\"", "");
+				curr = curr.replaceAll("\\)", "");
+				curr = curr.replaceAll(";", "");
+				curr = curr.replaceAll("run_program\\(", "sh ");
+				Log.v("Recovery Emulator", curr);
+				cmd.su.runWaitFor("echo \"" + curr + "\" >> " + temp
+						+ "/flash_gordon.sh");
+			}
 
 			// mount() / unmount() parsing & translation
 		} else if (curr.contains("mount(")) {
@@ -196,8 +213,8 @@ public class EdifyParser {
 			arr[0] = arr[0].replaceAll("\"", "");
 			arr[1] = arr[1].replaceAll("\"", "");
 			Log.v("Recovery Emulator", arr[0] + " of=" + arr[1]);
-			cmd.su.runWaitFor("echo \"" + arr[0] + " of=" + arr[1]
-					+ "\" >> " + temp + "/flash_gordon.sh");
+			cmd.su.runWaitFor("echo \"" + arr[0] + " of=" + arr[1] + "\" >> "
+					+ temp + "/flash_gordon.sh");
 
 		} else {
 			Log.v("Recovery Emulator", curr);
@@ -257,6 +274,7 @@ public class EdifyParser {
 			}
 			loop();
 			br.close();
+
 			br = new BufferedReader(new InputStreamReader(stderr));
 			while ((line = br.readLine()) != null) {
 				// Log.e("[Error]", line);
