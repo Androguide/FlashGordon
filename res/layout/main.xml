@@ -1,0 +1,131 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/tools"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:ellipsize="none"
+            android:fontFamily="sans-serif-thin"
+            android:gravity="center_horizontal"
+            android:maxLines="10"
+            android:scrollHorizontally="false"
+            android:text="Flash Gordon"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#33B6EA"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/tweaksSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:ellipsize="none"
+            android:fontFamily="sans-serif-thin"
+            android:gravity="center_horizontal"
+            android:maxLines="10"
+            android:scrollHorizontally="false"
+            android:text="Making Recoveries Obsolete!"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textStyle="italic" />
+
+        <View
+            android:id="@+id/topDivider"
+            android:layout_width="fill_parent"
+            android:layout_height="0.1dip"
+            android:layout_marginTop="16dp"
+            android:background="#33B6EA" />
+
+        <Button
+            android:id="@+id/pickZip"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="32dp"
+  			android:drawableLeft="@drawable/ic_action_select"
+            android:fontFamily="sans-serif-light"
+            android:text="Select zip..." />
+
+        <TextView
+            android:id="@+id/zipLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:fontFamily="sans-serif-light"
+            android:gravity="center"
+            android:text=""
+            android:textColor="#33b5e5" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:weightSum="100" >
+
+            <CheckBox
+                android:id="@+id/wipeCache"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="50"
+                android:fontFamily="sans-serif-light"
+                android:text="Wipe cache" />
+
+            <CheckBox
+                android:id="@+id/wipeDalvik"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="50"
+                android:fontFamily="sans-serif-light"
+                android:text="Wipe Dalvik-cache" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical" >
+
+            <CheckBox
+                android:id="@+id/wipeData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:fontFamily="sans-serif-light"
+                android:text="Wipe /data" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/flashNow"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:fontFamily="sans-serif-thin"
+            android:text="Flash Now!"
+            android:drawableLeft="@drawable/ic_action_flash"
+            android:textColor="#33b6ea"
+            android:textSize="24sp" />
+
+        <com.fima.cardsui.views.CardUI
+            android:id="@+id/cardsview"
+            android:layout_width="match_parent"
+            android:layout_height="250dip" />
+    </LinearLayout>
+
+</ScrollView>
