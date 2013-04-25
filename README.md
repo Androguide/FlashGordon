@@ -17,6 +17,7 @@ Here is what happens step by step :
 * The app creates a notification, just tap on it to reboot
 
 In order to achieve those last 2 steps, I'm writing a full Edify to Bash parser and translator.
+
 Here is the list of all the Edify commands this parser can currently process and what their respective bash translation is (under each edify command), using examples:
 (more will be added over time, this is really just a draft)
 
