@@ -96,3 +96,9 @@ You can discuss about this project on xda-developers.com at the following thread
 * [Development Thread](http://forum.xda-developers.com/showthread.php?t=2250632)
 
 If you want to contribute, please make a pull request or post your suggestions on the xda thread.
+
+
+## Screenshots
+![1](http://imageshack.us/a/img259/3427/flash2r.png) ![2](http://imageshack.us/a/img841/1894/flash3n.png) ![3](http://imageshack.us/a/img818/1431/flash4.png)
+![4](http://imageshack.us/a/img707/4690/flash5t.png) ![5](http://imageshack.us/a/img841/1416/flash6.png) ![6](http://imageshack.us/a/img10/4111/flash8q.png)
+![7](http://imageshack.us/a/img690/8149/flash1bz.png) ![8](http://img59.imageshack.us/img59/5444/flashib.png)
