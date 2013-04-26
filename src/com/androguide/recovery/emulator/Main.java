@@ -1,6 +1,11 @@
 package com.androguide.recovery.emulator;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 
 import android.app.Activity;
 import android.app.NotificationManager;
@@ -45,6 +50,8 @@ public class Main extends Activity implements OnCheckedChangeListener,
 	private Boolean wipeCache = false, wipeDalvik = false, wipeData = false;
 	private File zipToFlash;
 	private CardUI mCardView;
+	private static String file = "";
+	private static String chained[] = { "" };
 
 	public static String sd = Environment.getExternalStorageDirectory()
 			.toString();
@@ -139,7 +146,6 @@ public class Main extends Activity implements OnCheckedChangeListener,
 	}
 
 	private void flashNow() {
-
 		final ProgressDialog flashDialog = new ProgressDialog(this);
 		flashDialog.setIndeterminate(true);
 		flashDialog.setMessage("Flashing...");
@@ -169,7 +175,8 @@ public class Main extends Activity implements OnCheckedChangeListener,
 				flashDialog.dismiss();
 				createNotification(1234);
 				CMDProcessor cmd = new CMDProcessor();
-				cmd.su.runWaitFor("busybox sed -i \'/^$/d\' " + temp + "/flash_gordon.sh");
+				cmd.su.runWaitFor("busybox sed -i \'/^$/d\' " + temp
+						+ "/flash_gordon.sh");
 				super.handleMessage(msg);
 			}
 		};
@@ -255,8 +262,8 @@ public class Main extends Activity implements OnCheckedChangeListener,
 								CMDProcessor cmd = new CMDProcessor();
 								cmd.su.runWaitFor("busybox rm -rf " + temp);
 								cmd.su.runWaitFor("mkdir " + homeDir + "/tmp");
-								cmd.su.runWaitFor("unzip -d " + homeDir
-										+ "/tmp " + zipToFlash);
+								cmd.su.runWaitFor("unzip " + zipToFlash
+										+ " -d " + homeDir + "/tmp ");
 
 								handler.sendEmptyMessage(0);
 							}
@@ -292,6 +299,69 @@ public class Main extends Activity implements OnCheckedChangeListener,
 			break;
 		}
 		super.onActivityResult(requestCode, resultCode, data);
+	}
+
+	public static void readUpdaterScript(String scriptLocation,
+			ProgressDialog dialog) {
+
+		try {
+			String line;
+			Process process = Runtime.getRuntime().exec("su");
+			OutputStream stdin = process.getOutputStream();
+			InputStream stderr = process.getErrorStream();
+			InputStream stdout = process.getInputStream();
+
+			stdin.write(("cat " + scriptLocation + "\n").getBytes());
+			stdin.write("exit\n".getBytes());
+			stdin.flush();
+
+			stdin.close();
+
+			BufferedReader br = new BufferedReader(
+					new InputStreamReader(stdout));
+			while ((line = br.readLine()) != null) {
+				file += line;
+				// Log.d("[Output]", line);
+				// Log.d("[Output Chained]", file);
+				// interpreterAlgorithm(line);
+			}
+			loop(dialog);
+			br.close();
+
+			br = new BufferedReader(new InputStreamReader(stderr));
+			while ((line = br.readLine()) != null) {
+				// Log.e("[Error]", line);
+			}
+			br.close();
+
+			process.waitFor();
+			process.destroy();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void loop(ProgressDialog dialog) {
+		file = file.replaceAll("\\),", ");");
+		chained = file.split("\\);");
+		chained = file.split("\\);");
+		int i = 0;
+		while (i < chained.length) {
+
+			String curr = chained[i];
+			if (curr.contains("ui_print(")) {
+				curr = curr.replaceAll("\"", "");
+				curr = curr.replaceAll("\\)", "");
+				curr = curr.replaceAll(";", "");
+				curr = curr.replaceAll("ui_print\\(", "");
+				dialog.setMessage(curr);
+			}
+			EdifyParser.interpreterAlgorithm(curr);
+			i++;
+		}
 	}
 
 }

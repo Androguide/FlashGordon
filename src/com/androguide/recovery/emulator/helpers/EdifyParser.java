@@ -48,6 +48,7 @@ public class EdifyParser {
 		} else if (curr.contains("format(")) {
 			// TODO: learn what the translation for format() would be in bash
 
+			// Avoiding commented-out lines
 		} else if (curr.contains("#")) {
 
 			// Deleting useless show_progress() lines
@@ -74,15 +75,30 @@ public class EdifyParser {
 
 			// package_extract_file() parsing & translation
 		} else if (curr.contains("package_extract_file(")) {
-			curr = curr.replaceAll(",", "");
+
 			curr = curr.replaceAll("\"", "");
 			curr = curr.replaceAll("\\)", "");
 			curr = curr.replaceAll(";", "");
-			curr = curr.replaceAll("package_extract_file\\(", "busybox cp -fp "
-					+ temp + "/");
-			Log.v("Recovery Emulator", curr);
-			cmd.su.runWaitFor("echo \"" + curr + "\" >> " + temp
-					+ "/flash_gordon.sh");
+			
+			if (curr.contains("boot.img")) {
+				curr = curr.replaceAll("package_extract_file\\(", "dd if="
+						+ temp + "/");
+				curr = curr.replaceAll(", ", " of=");
+
+				Log.v("Recovery Emulator", curr);
+				cmd.su.runWaitFor("echo \"" + curr + "\" >> " + temp
+						+ "/flash_gordon.sh");
+
+			} else {
+				curr = curr.replaceAll(",", "");
+
+				curr = curr.replaceAll("package_extract_file\\(",
+						"busybox cp -fp " + temp + "/");
+
+				Log.v("Recovery Emulator", curr);
+				cmd.su.runWaitFor("echo \"" + curr + "\" >> " + temp
+						+ "/flash_gordon.sh");
+			}
 
 			// package_extract_dir() parsing & translation
 		} else if (curr.contains("package_extract_dir(")) {
@@ -119,7 +135,6 @@ public class EdifyParser {
 			curr = curr.replaceAll("\"", "");
 			String[] array = curr.split(",\\s");
 
-			String placeHolder = array[4];
 			String[] path = array[4].split("/");
 
 			Log.v("Recovery Emulator", "chown " + array[0] + ":" + array[1]
@@ -207,6 +222,7 @@ public class EdifyParser {
 				}
 			}
 
+			// write_raw_image() parsing & translation
 		} else if (curr.contains("write_raw_image(")) {
 			curr = curr.replaceAll("write_raw_image\\(", "dd if=");
 			String[] arr = curr.split("\", \"");
@@ -219,9 +235,7 @@ public class EdifyParser {
 		} else {
 			Log.v("Recovery Emulator", curr);
 		}
-		// cmd.su.runWaitFor("echo \""
-		// + "busybox mount -o ro,remount -t auto /system"+"\" >> " + temp +
-		// "/flash_gordon.sh");
+
 	}
 
 	public static void loop() {
@@ -230,7 +244,6 @@ public class EdifyParser {
 		chained = file.split("\\);");
 		int i = 0;
 		while (i < chained.length) {
-
 			String curr = chained[i];
 			interpreterAlgorithm(curr);
 			i++;
