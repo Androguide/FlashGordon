@@ -102,15 +102,28 @@ public class EdifyParser {
 
 			// package_extract_dir() parsing & translation
 		} else if (curr.contains("package_extract_dir(")) {
-			curr = curr.replace("package_extract_dir(\"", "busybox cp -rfp "
-					+ temp + "/");
-			curr = curr.replaceAll("\", \"", "/* ");
-			curr = curr.replaceAll(",", "");
+			String original = curr;
+			curr = curr.replace("package_extract_dir(\"", "");
 			curr = curr.replaceAll("\"", "");
 			curr = curr.replaceAll("\\)", "");
 			curr = curr.replaceAll(";", "");
-			Log.v("Recovery Emulator", curr);
-			cmd.su.runWaitFor("echo \"" + curr + "\" >> " + temp
+			
+			String arr[] = curr.split(", ");
+			
+			Log.v("Recovery Emulator", "mkdir -p " + arr[1]);
+			cmd.su.runWaitFor("echo \"mkdir -p " + arr[1] + "\" >> " + temp
+					+ "/flash_gordon.sh");
+			
+			
+			original = original.replace("package_extract_dir(\"", "busybox cp -rfp "
+					+ temp + "/");
+			original = original.replaceAll("\", \"", "/* ");
+			original = original.replaceAll(",", "");
+			original = original.replaceAll("\"", "");
+			original = original.replaceAll("\\)", "");
+			original = original.replaceAll(";", "");
+			Log.v("Recovery Emulator", original);
+			cmd.su.runWaitFor("echo \"" + original + "\" >> " + temp
 					+ "/flash_gordon.sh");
 
 			// set_perm() parsing & translation
