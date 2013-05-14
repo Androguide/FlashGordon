@@ -27,7 +27,7 @@ public class RebootActivity extends Activity {
 	private void normalReboot() {
 
 		CMDProcessor cmd = new CMDProcessor();
-		cmd.su.runWaitFor("reboot");
+		cmd.su.runWaitFor("busybox reboot");
 	}
 
 }
