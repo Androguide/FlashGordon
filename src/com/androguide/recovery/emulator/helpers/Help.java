@@ -25,8 +25,8 @@ public class Help {
 
 	public static void unpackZip(File selectedZip) {
 
-		cmd.su.runWaitFor("mkdir " + homeDir + "/tmp");
-		cmd.su.runWaitFor("unzip -d " + homeDir + "/tmp " + selectedZip);
+		cmd.su.runWaitFor("busybox mkdir " + homeDir + "/tmp");
+		cmd.su.runWaitFor("busybox unzip -d " + homeDir + "/tmp " + selectedZip);
 	}
 
 	public static Boolean isFlashable() {
@@ -40,12 +40,12 @@ public class Help {
 
 	public static void moveScriptToTmp(){
 		
-		cmd.su.runWaitFor("cp -fp "+ temp + updaterScript + " " + temp + "/updater-script");
+		cmd.su.runWaitFor("busybox cp -fp "+ temp + updaterScript + " " + temp + "/updater-script");
 	}
 	
 	public static void installZipBinary(Context context) {
 
-		cmd.su.runWaitFor("mkdir " + homeDir);
+		cmd.su.runWaitFor("busybox mkdir " + homeDir);
 
 		File update = new File(homeDir + "/zip");
 		File zipBin = new File("/system/xbin/zip");
@@ -74,32 +74,26 @@ public class Help {
 			}
 			
 			cmd.su.runWaitFor("busybox mount -o remount,rw /system");
-			cmd.su.runWaitFor("mount -o remount,rw /system");
-			cmd.su.runWaitFor("cp -fp " + sd
+			cmd.su.runWaitFor("busybox cp -fp " + sd
 					+ "/RecoveryEmulator/zip /system/xbin/zip");
 			cmd.su.runWaitFor("busybox chmod 775 /system/xbin/zip");
-			cmd.su.runWaitFor("chmod 775  /system/xbin/zip");
-			cmd.su.runWaitFor("mount -o remount,ro /system");
+			cmd.su.runWaitFor("busybox chown 0.2000 /system/xbin/zip");
 			cmd.su.runWaitFor("busybox mount -o remount,ro /system");
 		}
 	}
 
 	public static void wipeCache() {
 
-		cmd.su.runWaitFor("busybox rm -f /cache/*");
-		cmd.su.runWaitFor("rm - f /cache/*");
+		cmd.su.runWaitFor("busybox rm -rf /cache/*");
 	}
 
 	public static void wipeDalvik() {
 
 		cmd.su.runWaitFor("busybox rm -f /cache/dalvik-cache/*");
-		cmd.su.runWaitFor("rm - f /cache/dalvik-cache/*");
 		cmd.su.runWaitFor("busybox rm -f /data/dalvik-cache/*");
-		cmd.su.runWaitFor("rm - f /data/dalvik-cache/*");
 	}
 	
 	public static void wipeData() {
-		cmd.su.runWaitFor("busybox rm -f /data/*");
-		cmd.su.runWaitFor("rm - f /data/*");
+		cmd.su.runWaitFor("busybox rm -rf /data/*");
 	}
 }
