@@ -144,40 +144,19 @@ public class EdifyParser {
 
 			// set_perm_recursive() parsing & translation
 		} else if (curr.contains("set_perm_recursive(")) {
+			curr = curr.replaceAll("\\)", "");
+			curr = curr.replaceAll(";", "");
 			curr = curr.replaceAll("set_perm_recursive\\(", "");
-			curr = curr.replaceAll("\"", "");
 			String[] array = curr.split(",\\s");
 
-			String[] path = array[4].split("/");
-
-			Log.v("Recovery Emulator", "chown " + array[0] + ":" + array[1]
-					+ " " + array[4]);
-			cmd.su.runWaitFor("echo \"" + "chown " + array[0] + ":" + array[1]
-					+ " " + array[4] + "\" >> " + temp + "/flash_gordon.sh");
-
-			Log.v("Recovery Emulator", "chmod " + array[3] + " " + array[4]);
-			cmd.su.runWaitFor("echo \"" + "chmod " + array[3] + " " + array[4]
+			Log.v("Recovery Emulator", "chown -R " + array[0] + ":" + array[1]
+					+ " " + array[3]);
+			cmd.su.runWaitFor("echo \"" + "chown -R " + array[0] + ":" + array[1]
+					+ " " + array[3] + "\" >> " + temp + "/flash_gordon.sh");
+			Log.v("Recovery Emulator", "chmod -R " + array[2] + " " + array[3]);
+			cmd.su.runWaitFor("echo \"" + "chmod -R " + array[2] + " " + array[3]
 					+ "\" >> " + temp + "/flash_gordon.sh");
-
-			int a = 0;
-
-			while (a < path.length) {
-				if (a > 0 && a < (path.length - 1)) {
-
-					Log.v("Recovery Emulator", "chown " + array[0] + ":"
-							+ array[1] + " /" + path[a]);
-					cmd.su.runWaitFor("echo \"" + "chown " + array[0] + ":"
-							+ array[1] + " /" + path[a] + "\" >> " + temp
-							+ "/flash_gordon.sh");
-
-					Log.v("Recovery Emulator", "chmod " + array[3] + " /"
-							+ path[a]);
-					cmd.su.runWaitFor("echo \"" + "chmod " + array[3] + " /"
-							+ path[a] + "\" >> " + temp + "/flash_gordon.sh");
-				}
-				a++;
-			}
-
+			
 			// delete() parsing & translation
 		} else if (curr.contains("delete(\"")) {
 			curr = curr.replaceAll(",", "");
