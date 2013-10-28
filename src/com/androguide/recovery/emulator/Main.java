@@ -275,18 +275,22 @@ public class Main extends Activity implements OnCheckedChangeListener,
 							public void handleMessage(Message msg) {
 								myProgress.dismiss();
 
-								if (!zipToFlash.toString().contains(".zip")) {
-									Toast.makeText(
-											context,
-											"The file you selected is not a zip!",
-											Toast.LENGTH_LONG).show();
-								}
+								if (((CheckBox) findViewById(R.id.safeMode))
+										.isChecked()) {
 
-								if (!Help.isFlashable()) {
-									Toast.makeText(
-											context,
-											"The package you selected is not a valid flashable zip!",
-											Toast.LENGTH_SHORT).show();
+									if (!zipToFlash.toString().contains(".zip")) {
+										Toast.makeText(
+												context,
+												"The file you selected is not a zip!",
+												Toast.LENGTH_LONG).show();
+									}
+
+									if (!Help.isFlashable()) {
+										Toast.makeText(
+												context,
+												"The package you selected is not a valid flashable zip!",
+												Toast.LENGTH_SHORT).show();
+									}
 								}
 								super.handleMessage(msg);
 							}
