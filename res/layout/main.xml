@@ -69,6 +69,13 @@
             android:gravity="center"
             android:text=""
             android:textColor="#33b5e5" />
+        
+        <CheckBox 
+            android:id="@+id/safeMode"
+            android:checked="true"
+            android:fontFamily="sans-serif-light"
+            android:gravity="center_horizontal"
+            android:text="Safe Mode (checks if the zip is a valid flashable zip)"/>
 
         <LinearLayout
             android:layout_width="match_parent"
